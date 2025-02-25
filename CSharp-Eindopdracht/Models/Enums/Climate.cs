@@ -1,6 +1,9 @@
 ﻿namespace CSharp_Eindopdracht.Models.Enums
 {
-    public class Climate
+    public enum Climate
     {
+        Tropical,
+        Temperate,
+        Arctic
     }
 }

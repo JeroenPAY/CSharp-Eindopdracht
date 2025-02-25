@@ -1,6 +1,9 @@
 ﻿namespace CSharp_Eindopdracht.Models.Enums
 {
-    public class SecurityLevel
+    public enum SecurityLevel
     {
+        Low,
+        Medium,
+        High
     }
 }

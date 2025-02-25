@@ -1,6 +1,11 @@
 ﻿namespace CSharp_Eindopdracht.Models.Enums
 {
-    public class DietaryClass
+    public enum DietaryClass
     {
+        Carnivore,
+        Herbivore,
+        Omnivore,
+        Insectivore,
+        Piscivore
     }
 }

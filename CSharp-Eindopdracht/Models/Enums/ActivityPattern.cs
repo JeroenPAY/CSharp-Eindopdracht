@@ -1,6 +1,9 @@
 ﻿namespace CSharp_Eindopdracht.Models.Enums
 {
-    public class ActivityPattern
+    public enum ActivityPattern
     {
+        Diurnal,
+        Nocturnal,
+        Cathemeral
     }
 }

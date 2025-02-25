@@ -1,6 +1,12 @@
 ﻿namespace CSharp_Eindopdracht.Models.Enums
 {
-    public class Size
+    public enum Size
     {
+        Microscopic,
+        VerySmall,
+        Small,
+        Medium,
+        Large,
+        VeryLarge
     }
 }

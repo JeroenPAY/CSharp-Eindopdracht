@@ -1,62 +1,52 @@
+using CSharp_Eindopdracht.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using Dierentuin.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews(); // MVC Controllers + Razor Views
-builder.Services.AddControllers();         // API Controllers
-builder.Services.AddEndpointsApiExplorer(); // Voor Swagger/Endpoints API-documentatie
+// Voeg services toe aan de container
+builder.Services.AddControllersWithViews(); // Voor de MVC-webinterface
+builder.Services.AddRazorPages(); // Voor Razor Views
 
-// Add Swagger for API documentation
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "Dierentuin API",
-        Version = "v1",
-        Description = "API voor het beheren van de virtuele dierentuin."
-    });
-});
-
-// Add Entity Framework and configure the database connection
+// Configureren van de DbContext met de connection string uit appsettings.json
 builder.Services.AddDbContext<ZooContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add other services (e.g., seeding, logging) here if needed
+// Configureer Swagger voor API-documentatie (optioneel, handig voor API's)
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dierentuin API v1");
-    });
+    app.UseDeveloperExceptionPage(); // Gedetailleerde foutmeldingen in ontwikkelmodus
+    app.UseSwagger();               // API-documentatie in dev-modus
+    app.UseSwaggerUI();             // Swagger UI voor interactie met de API
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts(); // Gebruik HTTPS Strict Transport Security in productie
+    app.UseExceptionHandler("/Home/Error"); // Gebruik aangepaste foutpagina
+    app.UseHsts(); // Forceer HTTPS in productie
 }
 
-app.UseHttpsRedirection(); // Redirect HTTP naar HTTPS
-app.UseStaticFiles();      // Maak toegang mogelijk tot bestanden in wwwroot
+app.UseHttpsRedirection(); // Redirect HTTP-verzoeken naar HTTPS
+app.UseStaticFiles();      // Serve bestanden uit wwwroot (CSS, JS, afbeeldingen)
 
-app.UseRouting();
+app.UseRouting();          // Configureer routing voor controllers en Razor Views
 
-app.UseAuthorization();
+app.UseAuthorization();    // (Optioneel) Middleware voor authenticatie/autorisatie
 
-// Configure routes for controllers
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+// Configureer endpoints voor de applicatie
+app.UseEndpoints(endpoints =>
+{
+    // Route voor MVC Controllers
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// Map API controllers (optional, if separate route handling is needed)
-app.MapControllers();
+    // Route voor Razor Pages (optioneel)
+    endpoints.MapRazorPages();
+});
 
-app.Run();
+app.Run(); // Start de applicatie
